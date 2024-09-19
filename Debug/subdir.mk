@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../MDIO_Program.c 
+../MDIO_Program.c \
+../Main.c 
 
 OBJS += \
-./MDIO_Program.o 
+./MDIO_Program.o \
+./Main.o 
 
 C_DEPS += \
-./MDIO_Program.d 
+./MDIO_Program.d \
+./Main.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

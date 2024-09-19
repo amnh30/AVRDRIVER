@@ -3,19 +3,91 @@
 #include "BIT_MATH.h"
 
 /* MCAL Layer Include*/
+#include "MDIO_Private.h"
 #include "MDIO_Config.h"
 #include "MDIO_Interface.h"
-#include "MDIO_Private.h"
 
-int main(int argc, char **argv)
+/* Set Intial Direction Function */
+
+void MDIO_IntialPins(void)
 {
+
+	PRIVATE_DDRA_REG = PRIVATE_CONC(MDIO_PA7_A_DIR,
+									MDIO_PA6_A_DIR,
+									MDIO_PA5_A_DIR,
+									MDIO_PA4_A_DIR,
+									MDIO_PA3_A_DIR,
+									MDIO_PA2_A_DIR,
+									MDIO_PA1_A_DIR,
+									MDIO_PA0_A_DIR);
+
+	PRIVATE_DDRB_REG = PRIVATE_CONC(MDIO_PA7_B_DIR,
+									MDIO_PA6_B_DIR,
+									MDIO_PA5_B_DIR,
+									MDIO_PA4_B_DIR,
+									MDIO_PA3_B_DIR,
+									MDIO_PA2_B_DIR,
+									MDIO_PA1_B_DIR,
+									MDIO_PA0_B_DIR);
+	PRIVATE_DDRC_REG = PRIVATE_CONC(MDIO_PA7_C_DIR,
+									MDIO_PA6_C_DIR,
+									MDIO_PA5_C_DIR,
+									MDIO_PA4_C_DIR,
+									MDIO_PA3_C_DIR,
+									MDIO_PA2_C_DIR,
+									MDIO_PA1_C_DIR,
+									MDIO_PA0_C_DIR);
+	PRIVATE_DDRD_REG = PRIVATE_CONC(MDIO_PA7_D_DIR,
+									MDIO_PA6_D_DIR,
+									MDIO_PA5_D_DIR,
+									MDIO_PA4_D_DIR,
+									MDIO_PA3_D_DIR,
+									MDIO_PA2_D_DIR,
+									MDIO_PA1_D_DIR,
+									MDIO_PA0_D_DIR);
+
+	PRIVATE_PORTA_REG = PRIVATE_CONC(MDIO_PA7_A_INIT_VALUE,
+									 MDIO_PA6_A_INIT_VALUE,
+									 MDIO_PA5_A_INIT_VALUE,
+									 MDIO_PA4_A_INIT_VALUE,
+									 MDIO_PA3_A_INIT_VALUE,
+									 MDIO_PA2_A_INIT_VALUE,
+									 MDIO_PA1_A_INIT_VALUE,
+									 MDIO_PA0_A_INIT_VALUE);
+
+	PRIVATE_PORTB_REG = PRIVATE_CONC(MDIO_PA7_B_INIT_VALUE,
+									 MDIO_PA6_B_INIT_VALUE,
+									 MDIO_PA5_B_INIT_VALUE,
+									 MDIO_PA4_B_INIT_VALUE,
+									 MDIO_PA3_B_INIT_VALUE,
+									 MDIO_PA2_B_INIT_VALUE,
+									 MDIO_PA1_B_INIT_VALUE,
+									 MDIO_PA0_B_INIT_VALUE);
+
+	PRIVATE_PORTC_REG = PRIVATE_CONC(MDIO_PA7_C_INIT_VALUE,
+									 MDIO_PA6_C_INIT_VALUE,
+									 MDIO_PA5_C_INIT_VALUE,
+									 MDIO_PA4_C_INIT_VALUE,
+									 MDIO_PA3_C_INIT_VALUE,
+									 MDIO_PA2_C_INIT_VALUE,
+									 MDIO_PA1_C_INIT_VALUE,
+									 MDIO_PA0_C_INIT_VALUE);
+
+	PRIVATE_PORTD_REG = PRIVATE_CONC(MDIO_PA7_D_INIT_VALUE,
+									 MDIO_PA6_D_INIT_VALUE,
+									 MDIO_PA5_D_INIT_VALUE,
+									 MDIO_PA4_D_INIT_VALUE,
+									 MDIO_PA3_D_INIT_VALUE,
+									 MDIO_PA2_D_INIT_VALUE,
+									 MDIO_PA1_D_INIT_VALUE,
+									 MDIO_PA0_D_INIT_VALUE);
 }
 
 /* Set Pin Direction */
 u8 MDIO_u8SetPinDirection(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinDirec)
 {
 	u8 Local_u8ErrorSate = STD_TYPE_OK;
-	if (Copy_u8PinId <= MDIO_Pin_7 && Copy_u8PortId <= MDIO_PORTD && Copy_u8PinDirec <= MDIO_INPUT_PULLED_UP)
+	if (Copy_u8PinId <= MDIO_PIN_7 && Copy_u8PortId <= MDIO_PORTD && Copy_u8PinDirec <= MDIO_INPUT_PULLED_UP)
 	{
 		/* Select Pin Direction */
 		switch (Copy_u8PortId)
@@ -38,10 +110,6 @@ u8 MDIO_u8SetPinDirection(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinDirec)
 				/*Set PORTA Pin in DDRA Reg*/
 				SET_BIT(PRIVATE_PORTA_REG, Copy_u8PinId);
 			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
-			}
 			break;
 		case MDIO_PORTB:
 			if (Copy_u8PinDirec == MDIO_OUTPUT)
@@ -60,10 +128,6 @@ u8 MDIO_u8SetPinDirection(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinDirec)
 				CLEAR_BIT(PRIVATE_DDRB_REG, Copy_u8PinId);
 				/*Set PORTB Pin in DDRB Reg*/
 				SET_BIT(PRIVATE_PORTB_REG, Copy_u8PinId);
-			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
 			}
 			break;
 		case MDIO_PORTC:
@@ -84,10 +148,6 @@ u8 MDIO_u8SetPinDirection(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinDirec)
 				/*Set PORTC Pin in DDRC Reg*/
 				SET_BIT(PRIVATE_PORTC_REG, Copy_u8PinId);
 			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
-			}
 			break;
 		case MDIO_PORTD:
 			if (Copy_u8PinDirec == MDIO_OUTPUT)
@@ -107,15 +167,15 @@ u8 MDIO_u8SetPinDirection(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinDirec)
 				/*Set PORTD Pin in DDRD Reg*/
 				SET_BIT(PRIVATE_PORTD_REG, Copy_u8PinId);
 			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
-			}
 			break;
 		default:
-			Local_u8ErrorSate = STD_TYPE_NOK;
+
 			break;
 		}
+	}
+	else
+	{
+		Local_u8ErrorSate = STD_TYPE_NOK;
 	}
 	return Local_u8ErrorSate;
 }
@@ -124,7 +184,7 @@ u8 MDIO_u8SetPinDirection(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinDirec)
 u8 MDIO_u8SetPortDirection(u8 Copy_u8PortId, u8 Copy_u8PortDirec)
 {
 	u8 Local_u8ErrorSate = STD_TYPE_OK;
-	if (Copy_u8PortId <= MDIO_PORTD && Copy_u8PortDirec <= MDIO_INPUT_PULLED_UP)
+	if ((Copy_u8PortId <= MDIO_PORTD) && (Copy_u8PortDirec <= MDIO_INPUT_PULLED_UP))
 	{
 		switch (Copy_u8PortId)
 		{
@@ -132,92 +192,76 @@ u8 MDIO_u8SetPortDirection(u8 Copy_u8PortId, u8 Copy_u8PortDirec)
 			if (Copy_u8PortDirec == MDIO_OUTPUT)
 			{
 				/* Set all Port A pins as Output */
-				PRIVATE_DDRA_REG = MDIO_ALL_PORT_OUTPUT;
+				PRIVATE_DDRA_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_FLOATING)
 			{
 				/* Set all Port A pins as Input (Floating) */
-				PRIVATE_DDRA_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRA_REG = PRIVATE_ALL_PORT_INPUT_FLOATING;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_PULLED_UP)
 			{
 				/* Set all Port A pins as Input (Pulled-Up) */
-				PRIVATE_DDRA_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRA_REG = PRIVATE_ALL_PORT_INPUT_PULLED_UP;
 				/* Enable Pull-Up on all Port A pins */
-				PRIVATE_PORTA_REG = MDIO_ALL_PORT_OUTPUT;
-			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
+				PRIVATE_PORTA_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			break;
 		case MDIO_PORTB:
 			if (Copy_u8PortDirec == MDIO_OUTPUT)
 			{
 				/* Set all Port B pins as Output */
-				PRIVATE_DDRB_REG = MDIO_ALL_PORT_OUTPUT;
+				PRIVATE_DDRB_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_FLOATING)
 			{
 				/* Set all Port B pins as Input (Floating) */
-				PRIVATE_DDRB_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRB_REG = PRIVATE_ALL_PORT_INPUT_FLOATING;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_PULLED_UP)
 			{
 				/* Set all Port B pins as Input (Pulled-Up) */
-				PRIVATE_DDRB_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRB_REG = PRIVATE_ALL_PORT_INPUT_PULLED_UP;
 				/* Enable Pull-Up on all Port B pins */
-				PRIVATE_PORTB_REG = MDIO_ALL_PORT_OUTPUT;
-			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
+				PRIVATE_PORTB_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			break;
 		case MDIO_PORTC:
 			if (Copy_u8PortDirec == MDIO_OUTPUT)
 			{
 				/* Set all Port C pins as Output */
-				PRIVATE_DDRC_REG = MDIO_ALL_PORT_OUTPUT;
+				PRIVATE_DDRC_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_FLOATING)
 			{
 				/* Set all Port C pins as Input (Floating) */
-				PRIVATE_DDRC_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRC_REG = PRIVATE_ALL_PORT_INPUT_FLOATING;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_PULLED_UP)
 			{
 				/* Set all Port C pins as Input (Pulled-Up) */
-				PRIVATE_DDRC_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRC_REG = PRIVATE_ALL_PORT_INPUT_PULLED_UP;
 				/* Enable Pull-Up on all Port C pins */
-				PRIVATE_PORTC_REG = MDIO_ALL_PORT_OUTPUT;
-			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
+				PRIVATE_PORTC_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			break;
 		case MDIO_PORTD:
 			if (Copy_u8PortDirec == MDIO_OUTPUT)
 			{
 				/* Set all Port D pins as Output */
-				PRIVATE_DDRD_REG = MDIO_ALL_PORT_OUTPUT;
+				PRIVATE_DDRD_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_FLOATING)
 			{
 				/* Set all Port D pins as Input (Floating) */
-				PRIVATE_DDRD_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRD_REG = PRIVATE_ALL_PORT_INPUT_FLOATING;
 			}
 			else if (Copy_u8PortDirec == MDIO_INPUT_PULLED_UP)
 			{
 				/* Set all Port D pins as Input (Pulled-Up) */
-				PRIVATE_DDRD_REG = MDIO_ALL_PORT_INPUT;
+				PRIVATE_DDRD_REG = PRIVATE_ALL_PORT_INPUT_PULLED_UP;
 				/* Enable Pull-Up on all Port D pins */
-				PRIVATE_PORTD_REG = MDIO_ALL_PORT_OUTPUT;
-			}
-			else
-			{
-				Local_u8ErrorSate = STD_TYPE_NOK;
+				PRIVATE_PORTD_REG = PRIVATE_ALL_PORT_OUTPUT;
 			}
 			break;
 		default:
@@ -225,13 +269,17 @@ u8 MDIO_u8SetPortDirection(u8 Copy_u8PortId, u8 Copy_u8PortDirec)
 			break;
 		}
 	}
+	else
+	{
+		Local_u8ErrorSate = STD_TYPE_NOK;
+	}
 	return Local_u8ErrorSate;
 }
 /* Set Pin Value */
 u8 MDIO_u8SetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinValue)
 {
 	u8 Local_u8ErrorState = STD_TYPE_OK; // Corrected spelling from ErrorSate to ErrorState
-	if (Copy_u8PortId <= MDIO_PORTD && Copy_u8PinId <= MDIO_Pin_7 && Copy_u8PinValue <= MDIO_HIGH)
+	if (Copy_u8PortId <= MDIO_PORTD && Copy_u8PinId <= MDIO_PIN_7 && Copy_u8PinValue <= MDIO_HIGH)
 	{
 		/* Set Pin Value */
 		switch (Copy_u8PortId)
@@ -247,10 +295,6 @@ u8 MDIO_u8SetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinValue)
 				/* Clear PORTA Pin in PORTA Reg */
 				CLEAR_BIT(PRIVATE_PORTA_REG, Copy_u8PinId);
 			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
 			break;
 		case MDIO_PORTB:
 			if (Copy_u8PinValue == MDIO_HIGH)
@@ -262,10 +306,6 @@ u8 MDIO_u8SetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinValue)
 			{
 				/* Clear PORTB Pin in PORTB Reg */
 				CLEAR_BIT(PRIVATE_PORTB_REG, Copy_u8PinId);
-			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
 			}
 			break;
 		case MDIO_PORTC:
@@ -279,10 +319,6 @@ u8 MDIO_u8SetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinValue)
 				/* Clear PORTC Pin in PORTC Reg */
 				CLEAR_BIT(PRIVATE_PORTC_REG, Copy_u8PinId);
 			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
 			break;
 		case MDIO_PORTD:
 			if (Copy_u8PinValue == MDIO_HIGH)
@@ -295,15 +331,15 @@ u8 MDIO_u8SetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinValue)
 				/* Clear PORTD Pin in PORTD Reg */
 				CLEAR_BIT(PRIVATE_PORTD_REG, Copy_u8PinId);
 			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
 			break;
 		default:
 			Local_u8ErrorState = STD_TYPE_NOK;
 			break;
 		}
+	}
+	else
+	{
+		Local_u8ErrorState = STD_TYPE_NOK;
 	}
 	return Local_u8ErrorState;
 }
@@ -311,80 +347,20 @@ u8 MDIO_u8SetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 Copy_u8PinValue)
 /* Set Port Value */
 u8 MDIO_u8SetPortValue(u8 Copy_u8PortId, u8 Copy_u8PortValue)
 {
-	u8 Local_u8ErrorState = STD_TYPE_OK; // Corrected spelling from ErrorSate to ErrorState
-	if ((Copy_u8PortId <= MDIO_PORTD) && ((Copy_u8PortValue == MDIO_ALL_PORT_HIGH) || (Copy_u8PortValue == MDIO_ALL_PORT_LOW)))
+	u8 Local_u8ErrorState = STD_TYPE_OK;
+	if(Copy_u8PortId <= MDIO_PORTD)
 	{
-		/* Set Port Value */
 		switch (Copy_u8PortId)
 		{
-		case MDIO_PORTA:
-			if (Copy_u8PortValue == MDIO_ALL_PORT_HIGH)
-			{
-				/* Set PORTA Register to HIGH */
-				PRIVATE_PORTA_REG = MDIO_ALL_PORT_HIGH;
-			}
-			else if (Copy_u8PortValue == MDIO_ALL_PORT_LOW)
-			{
-				/* Set PORTA Register to LOW */
-				PRIVATE_PORTA_REG = MDIO_ALL_PORT_LOW;
-			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
-			break;
-		case MDIO_PORTB:
-			if (Copy_u8PortValue == MDIO_ALL_PORT_HIGH)
-			{
-				/* Set PORTB Register to HIGH */
-				PRIVATE_PORTB_REG = MDIO_ALL_PORT_HIGH;
-			}
-			else if (Copy_u8PortValue == MDIO_ALL_PORT_LOW)
-			{
-				/* Set PORTB Register to LOW */
-				PRIVATE_PORTB_REG = MDIO_ALL_PORT_LOW;
-			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
-			break;
-		case MDIO_PORTC:
-			if (Copy_u8PortValue == MDIO_ALL_PORT_HIGH)
-			{
-				/* Set PORTC Register to HIGH */
-				PRIVATE_PORTC_REG = MDIO_ALL_PORT_HIGH;
-			}
-			else if (Copy_u8PortValue == MDIO_ALL_PORT_LOW)
-			{
-				/* Set PORTC Register to LOW */
-				PRIVATE_PORTC_REG = MDIO_ALL_PORT_LOW; // Corrected register name from PRIVATE_PORTB_REG to PRIVATE_PORTC_REG
-			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
-			break;
-		case MDIO_PORTD:
-			if (Copy_u8PortValue == MDIO_ALL_PORT_HIGH)
-			{
-				/* Set PORTD Register to HIGH */
-				PRIVATE_PORTD_REG = MDIO_ALL_PORT_HIGH;
-			}
-			else if (Copy_u8PortValue == MDIO_ALL_PORT_LOW)
-			{
-				/* Set PORTD Register to LOW */
-				PRIVATE_PORTD_REG = MDIO_ALL_PORT_LOW;
-			}
-			else
-			{
-				Local_u8ErrorState = STD_TYPE_NOK;
-			}
-			break;
-		default:
-			Local_u8ErrorState = STD_TYPE_NOK;
-			break;
+		case MDIO_PORTA: PRIVATE_PORTA_REG = Copy_u8PortValue; break;
+		case MDIO_PORTB: PRIVATE_PORTB_REG = Copy_u8PortValue; break;
+		case MDIO_PORTC: PRIVATE_PORTC_REG = Copy_u8PortValue; break;
+		case MDIO_PORTD: PRIVATE_PORTD_REG = Copy_u8PortValue; break;
 		}
+	}
+	else
+	{
+		Local_u8ErrorState = STD_TYPE_NOK;
 	}
 	return Local_u8ErrorState;
 }
@@ -395,7 +371,7 @@ u8 MDIO_u8GetPinValue(u8 Copy_u8PortId, u8 Copy_u8PinId, u8 *Copy_pu8ReturnedPin
 	u8 Local_u8ErrorState = STD_TYPE_OK; // Initialize error state to OK
 
 	// Check if the port ID, pin ID are within valid ranges and pointer is not NULL
-	if (Copy_u8PortId <= MDIO_PORTD && Copy_u8PinId <= MDIO_Pin_7 && Copy_pu8ReturnedPinValue != POINTER_NULL)
+	if (Copy_u8PortId <= MDIO_PORTD && Copy_u8PinId <= MDIO_PIN_7 && Copy_pu8ReturnedPinValue != POINTER_NULL)
 	{
 		// Retrieve the value from the correct port
 		switch (Copy_u8PortId)
